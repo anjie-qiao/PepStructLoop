@@ -41,21 +41,15 @@ function Status({ type }: { type: string }) {
   return <span className={`status status-${type}`}>{type === "done" || type === "measured" ? "MEASURED" : type === "running" ? "RUNNING" : "PROJECTED"}</span>;
 }
 
-function MoleculeVisual() {
-  const helices = ["TM1", "TM2", "TM3", "TM4", "TM5", "TM6", "TM7"];
+function MoleculeVisual({ closeup = false }: { closeup?: boolean }) {
   return (
-    <div className="molecule" aria-label="Stylized seven-transmembrane NTSR1 and peptide interface topology">
-      <div className="structure-topline"><span>NTSR1 · TOPOLOGY VIEW</span><b>7TM GPCR</b></div>
-      <div className="membrane membrane-upper"><span>EXTRACELLULAR</span></div>
-      <div className="helix-bundle">
-        {helices.map((helix, i) => <i key={helix} className={`helix helix-${i + 1}`}><span>{helix}</span></i>)}
-        <div className="loop-trace trace-a" /><div className="loop-trace trace-b" /><div className="loop-trace trace-c" />
-      </div>
-      <div className="membrane membrane-lower"><span>CYTOPLASMIC</span></div>
-      <div className="peptide-trajectory"><span className="trajectory-label">DE NOVO PEPTIDE</span>{["G", "L", "W", "R", "Y", "A", "K"].map((aa, i) => <b key={i}>{aa}</b>)}</div>
-      <div className="contact contact-a"><i /> contact hypothesis</div>
-      <div className="contact contact-b"><i /> extracellular pose</div>
-      <div className="structure-scale"><span>0 Å</span><i /><span>40 Å</span></div>
+    <div className={`molecule molecular-image ${closeup ? "molecular-closeup" : ""}`} aria-label="Conceptual seven-transmembrane NTSR1 and de novo peptide molecular rendering">
+      <img src="/ntsr1-peptide-concept.png" alt="Conceptual molecular rendering of a seven-transmembrane receptor in a lipid bilayer with an approaching peptide" />
+      <div className="image-veil" />
+      <div className="structure-topline"><span>{closeup ? "INTERFACE DETAIL" : "NTSR1 · MOLECULAR VIEW"}</span><b>CONCEPTUAL ILLUSTRATION</b></div>
+      <div className="image-callout callout-peptide"><i /> de novo peptide</div>
+      <div className="image-callout callout-interface"><i /> extracellular contact hypothesis</div>
+      <div className="image-foot"><span>7TM GPCR · lipid bilayer</span><b>not a predicted candidate structure</b></div>
     </div>
   );
 }
@@ -166,7 +160,7 @@ export default function Home() {
         <div className="intelligence-copy"><span className="section-index">04 / STRUCTURE INTELLIGENCE</span><h2>Not a score.<br /><em>An interface hypothesis.</em></h2><p>Structure prediction is used as an evidence layer: candidates are assessed through receptor–peptide confidence, uncertainty, contact coverage and extracellular accessibility.</p><div className="metric-chips"><span>pair-chain ipTM</span><span>cross-chain PAE</span><span>interface pLDDT</span><span>contact coverage</span><span>pose flags</span></div></div>
         <div className="analysis-panel">
           <div className="panel-head"><span>CANDIDATE INTERFACE</span><Status type="running" /></div>
-          <div className="analysis-visual"><MoleculeVisual /></div>
+          <div className="analysis-visual"><MoleculeVisual closeup /></div>
           <div className="pending-metrics"><span>Metrics will populate from Stage 06</span><i /></div>
         </div>
       </section>

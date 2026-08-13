@@ -42,6 +42,7 @@ const prefixRootAssets = (source) =>
     .replaceAll("url(/_next/", `url(${basePath}/_next/`)
     .replaceAll('"/favicon.svg"', `"${basePath}/favicon.svg"`)
     .replaceAll('"/pepstructloop-social.png"', `"${basePath}/pepstructloop-social.png"`)
+    .replaceAll('"/ntsr1-peptide-concept.png"', `"${basePath}/ntsr1-peptide-concept.png"`)
     .replaceAll('href="/#', `href="${basePath}/#`);
 
 let html = prefixRootAssets(await response.text());
