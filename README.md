@@ -40,6 +40,10 @@ pnpm test
 
 The interactive project homepage lives in `app/`. It tells the sequence-universe → molecular-interface → structure-feedback story with measured project statistics and explicitly marked projections.
 
+Public homepage: **https://anjie-qiao.github.io/PepStructLoop/**
+
+`pnpm build:pages` creates the static GitHub Pages artifact in `pages-dist/` from the same validated homepage source.
+
 ## Scientific boundary
 
 The structural layer ranks hypotheses; it does not establish binding affinity or biological activity. Final candidates still require expert review and experimental validation.
