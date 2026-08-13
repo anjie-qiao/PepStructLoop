@@ -88,7 +88,7 @@ export default function Home() {
         <div className="grid-field" />
         <div className="hero-copy">
           <div className="eyebrow"><span /> SEQUENCE–STRUCTURE CLOSED LOOP</div>
-          <h1>From sequence<br />universe to<br /><em>molecular interface.</em></h1>
+          <h1><span className="product-title">PepStructLoop</span><small>From sequence universe<br />to <em>molecular interface.</em></small></h1>
           <p>蛋白质大语言模型探索十万级多肽序列空间，复合物结构预测进入三维界面，结构反馈驱动下一轮优化。</p>
           <div className="hero-actions">
             <a href="#funnel" className="button button-primary">Explore the pipeline <b>→</b></a>
