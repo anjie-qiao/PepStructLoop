@@ -10,14 +10,14 @@ const metrics = [
 ];
 
 const funnel = [
-  { value: "100,000", label: "Generate", status: "measured", width: 100 },
-  { value: "39,125", label: "QC pass", status: "measured", width: 77 },
-  { value: "9,305", label: "PPL", status: "measured", width: 59 },
-  { value: "5,584", label: "PPL pool", status: "measured", width: 46 },
-  { value: "4,016", label: "Core", status: "running", width: 35 },
-  { value: "~100–200", label: "Structure shortlist", status: "projected", width: 24 },
-  { value: "~100", label: "Final panel", status: "projected", width: 16 },
-  { value: "3", label: "Expert pick", status: "projected", width: 9 },
+  { value: "100,000", label: "Generate", status: "measured", width: 100, rate: "100%" },
+  { value: "39,125", label: "QC pass", status: "measured", width: 67, rate: "39.13%" },
+  { value: "9,305", label: "PPL evaluated", status: "measured", width: 48, rate: "9.31%" },
+  { value: "5,584", label: "PPL pool", status: "measured", width: 38, rate: "5.58%" },
+  { value: "4,016", label: "Structural core", status: "running", width: 31, rate: "4.02%" },
+  { value: "~100–200", label: "Structure shortlist", status: "projected", width: 18, rate: "projected" },
+  { value: "~100", label: "Final panel", status: "projected", width: 13, rate: "projected" },
+  { value: "3", label: "Expert pick", status: "projected", width: 8, rate: "projected" },
 ];
 
 const pipeline = [
@@ -42,28 +42,41 @@ function Status({ type }: { type: string }) {
 }
 
 function MoleculeVisual() {
-  const dots = Array.from({ length: 74 }, (_, i) => ({
-    left: 18 + ((i * 37) % 65),
-    top: 10 + ((i * 53) % 77),
-    size: 2 + (i % 4),
-    delay: (i % 9) * 0.25,
-  }));
+  const helices = ["TM1", "TM2", "TM3", "TM4", "TM5", "TM6", "TM7"];
   return (
-    <div className="molecule" aria-label="Abstract NTSR1 and peptide interface visualization">
-      <div className="orbit orbit-a" />
-      <div className="orbit orbit-b" />
-      <div className="receptor-glow" />
-      {dots.map((dot, i) => (
-        <span key={i} className="atom" style={{ left: `${dot.left}%`, top: `${dot.top}%`, width: dot.size, height: dot.size, animationDelay: `${dot.delay}s` }} />
-      ))}
-      <div className="peptide-ribbon">
-        {["G", "L", "W", "R", "Y", "A", "K"].map((aa, i) => <span key={i}>{aa}</span>)}
+    <div className="molecule" aria-label="Stylized seven-transmembrane NTSR1 and peptide interface topology">
+      <div className="structure-topline"><span>NTSR1 · TOPOLOGY VIEW</span><b>7TM GPCR</b></div>
+      <div className="membrane membrane-upper"><span>EXTRACELLULAR</span></div>
+      <div className="helix-bundle">
+        {helices.map((helix, i) => <i key={helix} className={`helix helix-${i + 1}`}><span>{helix}</span></i>)}
+        <div className="loop-trace trace-a" /><div className="loop-trace trace-b" /><div className="loop-trace trace-c" />
       </div>
-      <div className="interface-tag"><i /> predicted interface</div>
-      <div className="axis-label label-a">NTSR1 · 424 aa</div>
-      <div className="axis-label label-b">de novo peptide</div>
+      <div className="membrane membrane-lower"><span>CYTOPLASMIC</span></div>
+      <div className="peptide-trajectory"><span className="trajectory-label">DE NOVO PEPTIDE</span>{["G", "L", "W", "R", "Y", "A", "K"].map((aa, i) => <b key={i}>{aa}</b>)}</div>
+      <div className="contact contact-a"><i /> contact hypothesis</div>
+      <div className="contact contact-b"><i /> extracellular pose</div>
+      <div className="structure-scale"><span>0 Å</span><i /><span>40 Å</span></div>
     </div>
   );
+}
+
+function SequenceManifold() {
+  const amino = "ACDEFGHIKLMNPQRSTVWY";
+  return <div className="sequence-manifold" aria-label="Stylized sequence embedding manifold">
+    <div className="manifold-head"><span>SEQUENCE EMBEDDING</span><b>n = 100,000</b></div>
+    <div className="manifold-cloud">{Array.from({length: 54}, (_, i) => <i key={i} style={{left:`${7 + (i * 37) % 88}%`,top:`${12 + (i * 53) % 74}%`,opacity:.24 + (i % 5) * .13}}>{amino[i % amino.length]}</i>)}</div>
+    <div className="manifold-axis axis-x">latent dimension 01</div><div className="manifold-axis axis-y">latent dimension 02</div>
+    <div className="density-legend"><span>sampling density</span><i /><i /><i /></div>
+  </div>;
+}
+
+function ConfidenceMatrix() {
+  return <div className="confidence-matrix" aria-label="Stylized cross-chain predicted alignment error matrix">
+    <div className="matrix-head"><span>CROSS-CHAIN PAE</span><b>receptor × peptide</b></div>
+    <div className="matrix-body">{Array.from({length: 100}, (_, i) => <i key={i} style={{opacity:.16 + (((i * 7 + Math.floor(i / 10) * 3) % 10) / 13)}} />)}<div className="matrix-interface" /></div>
+    <div className="matrix-axis matrix-x">peptide residues</div><div className="matrix-axis matrix-y">NTSR1 residues</div>
+    <div className="matrix-legend"><span>low error</span><i /><span>high error</span></div>
+  </div>;
 }
 
 export default function Home() {
@@ -116,10 +129,9 @@ export default function Home() {
         <div className="legend"><span><i className="measured-dot" /> Measured</span><span><i className="running-dot" /> Running</span><span><i className="projected-dot" /> Projected</span></div>
         <div className="funnel-track">
           {funnel.map((stage, i) => (
-            <div className={`funnel-node ${stage.status}`} key={stage.label} style={{ flexBasis: `${stage.width}%` }}>
-              <div className="node-top"><span>{String(i + 1).padStart(2, "0")}</span><Status type={stage.status} /></div>
-              <strong>{stage.value}</strong><p>{stage.label}</p>
-              {i < funnel.length - 1 && <b className="connector">→</b>}
+            <div className={`funnel-row ${stage.status}`} key={stage.label}>
+              <div className="funnel-meta"><span>{String(i + 1).padStart(2, "0")}</span><p>{stage.label}</p><Status type={stage.status} /></div>
+              <div className="funnel-scale"><i style={{width:`${stage.width}%`}}><strong>{stage.value}</strong></i><b>{stage.rate}</b></div>
             </div>
           ))}
         </div>
@@ -130,13 +142,13 @@ export default function Home() {
         <header className="section-heading compact"><div><span className="section-index">02 / TWO INTELLIGENCE SPACES</span><h2>Explore broadly.<br /><em>Decide structurally.</em></h2></div></header>
         <div className="space-grid">
           <article className="space-card sequence-card">
-            <div className="space-orb"><span>ACDEFGHIKLMNPQRSTVWY</span></div>
+            <SequenceManifold />
             <Status type="measured" /><h3>Sequence space</h3><p className="space-question">What can exist?</p>
             <ul><li>PepMLM-650M conditional generation</li><li>22 peptide lengths · 12–33 aa</li><li>Four sampling regimes</li><li>PPL-guided plausibility</li><li>Physicochemical developability</li></ul>
           </article>
           <div className="space-bridge"><span>LANGUAGE</span><i>→</i><span>GEOMETRY</span></div>
           <article className="space-card structure-card" id="structure">
-            <div className="mini-structure"><i /><i /><i /><i /><i /><i /><i /></div>
+            <ConfidenceMatrix />
             <Status type="running" /><h3>Structure space</h3><p className="space-question">How may it interact?</p>
             <ul><li>Full-length 424 aa NTSR1</li><li>Shared receptor MSA · depth 512</li><li>Boltz complex prediction</li><li>Cross-chain PAE and interface confidence</li><li>Extracellular pose plausibility</li></ul>
           </article>
@@ -173,8 +185,8 @@ export default function Home() {
       <section className="section diversity-section">
         <header className="section-heading"><div><span className="section-index">06 / DIVERSITY ATLAS</span><h2>Quality without<br /><em>collapsing diversity.</em></h2></div><p>The core library preserves multiple sampling regimes and all 22 designed peptide lengths.</p></header>
         <div className="diversity-grid">
-          <div className="profile-chart"><h3>Core library by sampling profile</h3>{profiles.map(p=><div className="bar-row" key={p.name}><span>{p.name}</span><div><i style={{width:`${p.pct}%`,background:p.color}} /></div><strong>{p.value.toLocaleString()}</strong></div>)}<p>Measured · n = 4,016</p></div>
-          <div className="length-visual"><h3>Designed peptide length space</h3><div className="length-axis">{Array.from({length:22},(_,i)=>12+i).map((x,i)=><i key={x} style={{height:`${24 + ((i*19)%62)}%`}}><span>{i%3===0?x:''}</span></i>)}</div><div className="length-caption"><strong>12</strong><span>22 discrete lengths · 12–33 aa</span><strong>33 aa</strong></div></div>
+          <div className="profile-chart"><div className="chart-head"><div><span>SAMPLING PROFILE</span><h3>Core library composition</h3></div><b>n = 4,016</b></div>{profiles.map(p=><div className="bar-row" key={p.name}><span>{p.name}</span><div><i style={{width:`${p.pct}%`,background:p.color}} /></div><strong>{p.value.toLocaleString()}<small>{p.pct}%</small></strong></div>)}<p><i /> Measured after diversity-aware selection</p></div>
+          <div className="length-visual"><h3>Designed peptide length coverage</h3><div className="coverage-head"><span>LENGTH (aa)</span><b>22 / 22 covered</b></div><div className="length-axis">{Array.from({length:22},(_,i)=>12+i).map((x)=><i key={x}><span>{x}</span></i>)}</div><div className="coverage-note"><i /> Every discrete length from 12 to 33 aa is represented in the structural core. Bar height is intentionally not used because per-length counts are not reported here.</div></div>
         </div>
       </section>
 
