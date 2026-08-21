@@ -20,17 +20,18 @@ test("server-renders the PepStructLoop project homepage", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>PepStructLoop/);
-  assert.match(html, /From sequence/);
+  assert.match(html, /From sequence space/);
   assert.match(html, /100,000/);
   assert.match(html, /4,016/);
   assert.match(html, /NTSR1/);
-  assert.match(html, /MEASURED/);
   assert.match(html, /0\.9046/);
   assert.match(html, /6\.37 Å/);
   assert.match(html, /93\.5%/);
   assert.match(html, /732/);
   assert.match(html, /690/);
-  assert.match(html, /COMPUTATION COMPLETE/);
+  assert.match(html, /Sequence models imagine/);
+  assert.doesNotMatch(html, /COMPUTATION COMPLETE/);
+  assert.doesNotMatch(html, /PROJECTED/);
   assert.match(html, /Language selection/);
   assert.match(html, /中文/);
 });
