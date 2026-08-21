@@ -7,18 +7,18 @@ const display = Space_Grotesk({ variable: "--font-display", subsets: ["latin"] }
 const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PepStructLoop — Sequence–Structure Closed-loop Peptide Design",
-  description: "A de novo AI pipeline for NTSR1-targeting peptide design across sequence and structure space.",
+  title: "PepStructLoop — Closed-loop NTSR1 Peptide Design Results",
+  description: "A completed sequence–structure–gradient optimization loop that narrowed 100,000 de novo sequences to 100 NTSR1 candidates.",
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
   openGraph: {
     title: "PepStructLoop",
-    description: "From sequence universe to molecular interface.",
+    description: "From 100,000 de novo sequences to 100 structurally prioritized NTSR1 candidates.",
     images: [{ url: "/pepstructloop-social.png", width: 1536, height: 1024 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "PepStructLoop",
-    description: "Sequence intelligence explores. Structure intelligence decides.",
+    description: "Sequence intelligence explores. Structure intelligence selects. Gradients optimize.",
     images: ["/pepstructloop-social.png"],
   },
 };

@@ -25,7 +25,12 @@ test("server-renders the PepStructLoop project homepage", async () => {
   assert.match(html, /4,016/);
   assert.match(html, /NTSR1/);
   assert.match(html, /MEASURED/);
-  assert.match(html, /PROJECTED/);
+  assert.match(html, /0\.9046/);
+  assert.match(html, /6\.37 Å/);
+  assert.match(html, /93\.5%/);
+  assert.match(html, /732/);
+  assert.match(html, /690/);
+  assert.match(html, /COMPUTATION COMPLETE/);
   assert.match(html, /Language selection/);
   assert.match(html, /中文/);
 });
